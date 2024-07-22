@@ -1,11 +1,25 @@
 import './Reservations.css'
+import Card from '../Card/Card'
 
-function Reservations() {
-  return (
-    
-      <h2>Reservations</h2>
-    
-  )
-} 
+function Reservations({ reservations }){
 
-export default Reservations;
+    const reservationCards = reservations.map(reservation => {
+      return (
+        <Card
+            key={reservation.id}
+            name={reservation.name}
+            date={reservation.date}
+            time={reservation.time}
+            number={reservation.number}
+        />
+      )
+    })
+  
+    return (
+      <div className='reservations-container'>
+        {reservationCards}
+      </div>
+    )
+  }
+
+  export default Reservations;

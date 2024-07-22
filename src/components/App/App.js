@@ -32,7 +32,8 @@ function App() {
   return (
     <main className="App">
       <h1 className='app-title'>Turing Cafe Reservations</h1>
-    <Reservations/>
+      {!reservations.length && <h2>No reservations yet -- add some!</h2> }
+    <Reservations  reservations={reservations}/>
     </main>
   );
 }
