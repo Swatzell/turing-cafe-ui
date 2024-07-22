@@ -1,41 +1,36 @@
 import './App.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Reservations from '../Reservations/Reservations';
 import Form from '../Form/Form';
-import { useState } from 'react';
+import Card from '../Card/Card';
 
 function App() {
-  const dummyReservations = [
-    {
-    id: 1,
-    name: 'Christie',
-    date: '12/29',
-    time: '7:00',
-    number: 12,
-  },
-  {
-    id: 2,
-    name: 'Leta',
-    date: '4/5',
-    time: '7:00',
-    number: 2,
-  },
-  {
-    id: 3,
-    name: 'Pam',
-    date: '1/21',
-    time: '6:00',
-    number: 4,
-  },
-]
-  const [reservations, setReservations] = useState(dummyReservations);
+  const [reservations, setReservations] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/v1/reservations')
+      .then(response => response.json())
+      .then(data => setReservations(data))
+      .catch(error => console.error('Error fetching reservations:', error));
+  }, []);
+
+  function addReservation(newReservation) {
+    setReservations([...reservations, newReservation]);
+  }
+
+  function deleteReservation(id) {
+    const filteredReservations = reservations.filter(reservation => reservation.id !== id);
+    setReservations(filteredReservations);
+  }
+
   return (
     <main className="App">
       <h1 className='app-title'>Turing Cafe Reservations</h1>
-      {!reservations.length && <h2>No reservations yet -- add some!</h2> }
-    <Reservations  reservations={reservations}/>
+      {!reservations.length && <h2>No reservations yet -- add some!</h2>}
+      <Form addReservation={addReservation}/>
+      <Reservations reservations={reservations} deleteReservation={deleteReservation}/>
     </main>
   );
 }
 
-export default App; 
+export default App;
