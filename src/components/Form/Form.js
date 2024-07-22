@@ -6,14 +6,20 @@ function Form({ addReservation }) {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [number, setNumber] = useState("");
+  const [error, setError] = useState("");
 
   function submitReservations(event) {
     event.preventDefault();
+    if (!name || !date || !time || !number) {
+      setError("All fields are required.");
+      return;
+    }
+
     const newReservation = {
       name: name,
       date: date,
       time: time,
-      number: number,
+      number: number, 
     };
 
     fetch('http://localhost:3001/api/v1/reservations', {
@@ -30,10 +36,13 @@ function Form({ addReservation }) {
         return response.json();
       })
       .then(data => {
-        addReservation(data);
+        addReservation(data); 
         clearInput();
+        setError(""); 
       })
-      .catch(error => console.error('Error adding reservation:', error));
+      .catch(error => {
+        setError('Error adding reservation: ' + error.message);
+      });
   }
 
   function clearInput() {
@@ -45,6 +54,7 @@ function Form({ addReservation }) {
 
   return (
     <form>
+      {error && <p className="error">{error}</p>}
       <input 
         type="text" 
         placeholder="name" 

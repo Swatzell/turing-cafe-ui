@@ -8,7 +8,7 @@ function Card({ id, name, date, time, number, deleteReservation}){
         <h4>{date}</h4>
         <h4>{time}</h4>
         <h4>{number}</h4>
-        <button onClick={()=> deleteReservation(id)}>🗑</button>
+        <button onClick={()=> deleteReservation(id)}>Cancel</button>
       </div>
     )
   }

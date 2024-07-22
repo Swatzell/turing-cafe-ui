@@ -2,16 +2,22 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import Reservations from '../Reservations/Reservations';
 import Form from '../Form/Form';
-import Card from '../Card/Card';
+
 
 function App() {
   const [reservations, setReservations] = useState([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch('http://localhost:3001/api/v1/reservations')
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch reservations');
+        }
+        return response.json();
+      })
       .then(data => setReservations(data))
-      .catch(error => console.error('Error fetching reservations:', error));
+      .catch(error => setError('Error fetching reservations: ' + error.message));
   }, []);
 
   function addReservation(newReservation) {
@@ -29,12 +35,13 @@ function App() {
         const filteredReservations = reservations.filter(reservation => reservation.id !== id);
         setReservations(filteredReservations);
       })
-      .catch(error => console.error('Error deleting reservation:', error));
+      .catch(error => setError('Error deleting reservation: ' + error.message));
   }
 
   return (
     <main className="App">
       <h1 className='app-title'>Turing Cafe Reservations</h1>
+      {error && <p className="error">{error}</p>}
       {!reservations.length && <h2>No reservations yet -- add some!</h2>}
       <Form addReservation={addReservation} />
       <Reservations reservations={reservations} deleteReservation={deleteReservation} />
