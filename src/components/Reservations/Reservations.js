@@ -1,26 +1,19 @@
-import './Reservations.css'
-import Card from '../Card/Card'
+import React from 'react';
+import Card from '../Card/Card';
+import './Reservations.css';
 
 function Reservations({ reservations, deleteReservation }) {
-
-    const reservationCards = reservations.map(reservation => {
-      return (
-        <Card
-            key={reservation.id}
-            name={reservation.name}
-            date={reservation.date}
-            time={reservation.time}
-            number={reservation.number}
-            deleteReservation={deleteReservation}
+  return (
+    <div className='reservations-container'>
+      {reservations.map(reservation => (
+        <Card 
+          key={reservation.id} 
+          {...reservation} 
+          deleteReservation={deleteReservation} 
         />
-      )
-    })
-  
-    return (
-      <div className='reservations-container'>
-        {reservationCards}
-      </div>
-    )
-  }
+      ))}
+    </div>
+  );
+}
 
-  export default Reservations;
+export default Reservations;

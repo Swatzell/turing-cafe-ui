@@ -19,16 +19,25 @@ function App() {
   }
 
   function deleteReservation(id) {
-    const filteredReservations = reservations.filter(reservation => reservation.id !== id);
-    setReservations(filteredReservations);
+    fetch(`http://localhost:3001/api/v1/reservations/${id}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to delete reservation');
+        }
+        const filteredReservations = reservations.filter(reservation => reservation.id !== id);
+        setReservations(filteredReservations);
+      })
+      .catch(error => console.error('Error deleting reservation:', error));
   }
 
   return (
     <main className="App">
       <h1 className='app-title'>Turing Cafe Reservations</h1>
       {!reservations.length && <h2>No reservations yet -- add some!</h2>}
-      <Form addReservation={addReservation}/>
-      <Reservations reservations={reservations} deleteReservation={deleteReservation}/>
+      <Form addReservation={addReservation} />
+      <Reservations reservations={reservations} deleteReservation={deleteReservation} />
     </main>
   );
 }
